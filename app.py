@@ -19,45 +19,50 @@ genai.configure(api_key=api_key)
 
 # --- ENGINE DE EXTRAÇÃO ---
 def extract_data_from_pdf(file_bytes):
+    # Configuração explícita para maximizar a saída
+    generation_config = {
+        "response_mime_type": "application/json",
+        "temperature": 0.1,       # Reduz criatividade para evitar alucinação
+        "max_output_tokens": 8192 # AUMENTADO: Permite respostas longas para PDFs grandes
+    }
+
+    # Tente usar o modelo mais recente e estável
     model = genai.GenerativeModel(
-        "gemini-2.5-flash",
-        generation_config={"response_mime_type": "application/json"}
+        "gemini-1.5-flash", # Se der erro 404 de novo, use "gemini-1.5-flash-latest"
+        generation_config=generation_config
     )
 
-    # Prompt System Engineering:
-    # Instrução explícita para limpar a sujeira do layout do SIPAC/UFES
     prompt = """
     Você é um parser de dados especialista em relatórios governamentais (SIPAC).
-    Analise o PDF anexo. O layout visual é tabular mas inconsistente (quebras de linha dentro da célula).
+    Analise o PDF anexo. O layout visual é tabular mas inconsistente.
     
-    OBJETIVO: Extrair metadados de envio de documentos.
-    
-    PADRÃO DE DADOS ESPERADO NA CÉLULA:
-    Muitas vezes o 'Código de Rastreio' (termina em BR) e o 'Processo' (formato N/ANO-DV) estão na mesma "coluna visual" mas em linhas diferentes. Separe-os.
+    OBJETIVO: Extrair TODOS os registros da tabela, sem pular nenhum.
     
     SAÍDA OBRIGATÓRIA (JSON Array):
     [
       {
-        "rastreio": "Código dos correios (ex: AL989685414BR) ou null",
-        "processo": "Número do processo (ex: 004094/2025-73) ou null",
-        "data_envio": "Data no formato DD/MM/AAAA",
-        "hora_envio": "Hora no formato HH:MM:SS",
-        "destino": "Nome completo do setor de destino (ex: PPGCTA/CCAE...)",
-        "documento_tipo": "Tipo do documento se houver (ex: Ofício, Correspondência)"
+        "rastreio": "Código dos correios (XX123456789BR) ou null",
+        "processo": "Número do processo (000000/0000-00) ou null",
+        "data_envio": "Data DD/MM/AAAA",
+        "destino": "Nome do setor"
       }
     ]
-    
-    REGRAS DE HIGIENIZAÇÃO:
-    1. Ignore cabeçalhos de página, rodapés, "UFES", "Página X".
-    2. Se uma linha tiver dados quebrados, una o contexto baseando-se na data/hora.
-    3. Retorne apenas o JSON cru, sem markdown.
     """
 
     try:
         response = model.generate_content(
             [prompt, {"mime_type": "application/pdf", "data": file_bytes}]
         )
-        return json.loads(response.text)
+        
+        # Tratamento de erro caso a resposta venha vazia ou cortada
+        try:
+            return json.loads(response.text)
+        except json.JSONDecodeError as e:
+            # Se o JSON estiver quebrado, mostramos o erro no log do Streamlit mas não quebramos o app
+            st.error(f"Erro de Parse JSON: A IA pode ter cortado a resposta. Detalhe: {e}")
+            # Retorna lista vazia para não travar a tela
+            return []
+            
     except Exception as e:
         st.error(f"Falha na inferência da IA: {e}")
         return []
