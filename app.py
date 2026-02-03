@@ -20,7 +20,7 @@ genai.configure(api_key=api_key)
 # --- ENGINE DE EXTRAÇÃO ---
 def extract_data_from_pdf(file_bytes):
     model = genai.GenerativeModel(
-        "gemini-1.5-flash",
+        "gemini-2.5-flash",
         generation_config={"response_mime_type": "application/json"}
     )
 
