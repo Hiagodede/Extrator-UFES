@@ -28,7 +28,7 @@ def extract_data_from_pdf(file_bytes):
 
     # Tente usar o modelo mais recente e estável
     model = genai.GenerativeModel(
-        "gemini-1.5-flash", # Se der erro 404 de novo, use "gemini-1.5-flash-latest"
+        "gemini-2.5-flash", # Se der erro 404 de novo, use "gemini-1.5-flash-latest"
         generation_config=generation_config
     )
 
