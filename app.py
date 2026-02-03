@@ -192,7 +192,7 @@ footer_html = """
 
 <div class="fixed-footer">
     <div class="footer-content">
-        <img src="https://avatars.githubusercontent.com/u/SEU_ID_GITHUB?v=4" class="profile-img" alt="Foto de Perfil">
+        <img src="https://media.licdn.com/dms/image/v2/D4D03AQGWQjoEnvH1Hw/profile-displayphoto-scale_200_200/B4DZwkLUOUJIAY-/0/1770133474521?e=1771459200&v=beta&t=GfeIu9hnn4ZlEd3ZevUOVdy0NnHz6lxp09wGbmaI9Vk" class="profile-img" alt="Foto de Perfil">
         
         <div class="text-area">
             <strong>Hiago do Carmo Lopes</strong><br>
