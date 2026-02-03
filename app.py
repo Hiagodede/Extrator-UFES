@@ -23,7 +23,7 @@ def extract_page_data(page_bytes, page_number):
         "temperature": 0.0,
     }
     
-    # Modelo Flash (Rápido e barato para loops)
+    # Modelo Flash
     model = genai.GenerativeModel("gemini-2.5-flash", generation_config=generation_config)
 
     prompt = f"""
@@ -121,8 +121,8 @@ if uploaded_file:
             type="primary"
         )
 
-# --- RODAPÉ ---
-st.markdown("<br><br><br><br>", unsafe_allow_html=True)
+# --- RODAPÉ FIXO (CORRIGIDO SEM INDENTAÇÃO) ---
+st.markdown("<br><br><br>", unsafe_allow_html=True)
 
 footer_html = """
 <style>
@@ -134,50 +134,43 @@ footer_html = """
     background-color: #0E1117;
     color: #FAFAFA;
     border-top: 1px solid #262730;
-    padding: 15px 0;
+    padding: 10px 0;
     z-index: 999;
 }
-
 .footer-content {
     display: flex;
     align-items: center;
     justify-content: center;
-    max-width: 800px;
-    margin: 0 auto;
-    font-family: 'Source Sans Pro', sans-serif;
+    gap: 20px;
+    width: 100%;
 }
-
 .profile-img {
-    width: 75px;
-    height: 75px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
-    object-fit: cover;
-    margin-right: 20px;
     border: 2px solid #4da6ff;
+    object-fit: cover;
 }
-
 .text-area {
-    font-size: 15px;
-    line-height: 1.5;
+    font-family: sans-serif;
+    font-size: 14px;
+    line-height: 1.4;
 }
-
 .text-area strong {
-    font-size: 17px;
+    font-size: 16px;
     color: #FFFFFF;
 }
-
 .social-links a {
     text-decoration: none;
     color: #4da6ff;
     margin-right: 15px;
-    font-weight: 600;
+    font-weight: bold;
 }
 </style>
 
 <div class="fixed-footer">
     <div class="footer-content">
-        <img src="https://media.licdn.com/dms/image/v2/D4D03AQGWQjoEnvH1Hw/profile-displayphoto-scale_200_200/B4DZwkLUOUJIAY-/0/1770133474521?e=1771459200&v=beta&t=GfeIu9hnn4ZlEd3ZevUOVdy0NnHz6lxp09wGbmaI9Vk" class="profile-img" alt="Foto de Perfil">
-        
+        <img src="https://media.licdn.com/dms/image/v2/D4D03AQGWQjoEnvH1Hw/profile-displayphoto-scale_200_200/B4DZwkLUOUJIAY-/0/1770133474521?e=1771459200&v=beta&t=GfeIu9hnn4ZlEd3ZevUOVdy0NnHz6lxp09wGbmaI9Vk" class="profile-img">
         <div class="text-area">
             <strong>Hiago do Carmo Lopes</strong><br>
             Diretor de Projetos de TI | Cinética Jr. (UFES)<br>
