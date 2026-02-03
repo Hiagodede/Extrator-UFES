@@ -69,7 +69,7 @@ st.markdown("**Instruções:** Faça upload do PDF gerado pelo sistema. A IA vai
 uploaded_file = st.file_uploader("Arraste o PDF aqui", type=["pdf"])
 
 if uploaded_file:
-    with st.spinner('Processando documento via Gemini 1.5 Flash...'):
+    with st.spinner('Processando documento via Gemini 2.5 Flash...'):
         bytes_data = uploaded_file.getvalue()
         data = extract_data_from_pdf(bytes_data)
         
