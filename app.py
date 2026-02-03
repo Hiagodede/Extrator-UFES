@@ -45,19 +45,21 @@ def extract_page_data(page_bytes, page_number):
     ]
     """
     
+    # Tentativa com Backoff Exponencial (Anti-Bloqueio)
     for attempt in range(3):
         try:
             response = model.generate_content([prompt, {"mime_type": "application/pdf", "data": page_bytes}])
             return json.loads(response.text)
         except Exception as e:
-            time.sleep(1)
+            # Se der erro 429 (Too Many Requests), espera mais tempo
+            time.sleep(5) 
             continue
             
     return []
 
 # --- INTERFACE ---
 st.title("🛡️ Extrator de Protocolo")
-st.markdown("**Status:** Processa página por página.")
+st.markdown("**Status:** Processamento Seguro (Limitado a 15 páginas/minuto para evitar bloqueio do Google).")
 
 uploaded_file = st.file_uploader("Arraste o PDF", type=["pdf"])
 
@@ -72,7 +74,7 @@ if uploaded_file:
         pdf_reader = PdfReader(uploaded_file)
         total_pages = len(pdf_reader.pages)
         
-        st.info(f"Arquivo identificado com {total_pages} páginas. Iniciando extração...")
+        st.info(f"Arquivo identificado com {total_pages} páginas. Iniciando extração controlada...")
         
         progress_bar = st.progress(0)
         status_text = st.empty()
@@ -94,6 +96,12 @@ if uploaded_file:
                     all_records.extend(page_data)
             
             progress_bar.progress(page_num / total_pages)
+            
+            # --- FREIO OBRIGATÓRIO (RATE LIMIT) ---
+            # O Free Tier permite 15 RPM (Requisições Por Minuto).
+            # 60 segundos / 15 = 4 segundos por requisição.
+            # Adicionamos um sleep para garantir que não bloqueie sua chave.
+            time.sleep(4) 
         
         status_text.empty()
         progress_bar.empty()
@@ -101,13 +109,14 @@ if uploaded_file:
         if all_records:
             st.session_state["extracted_data"] = pd.DataFrame(all_records)
         else:
-            st.error("Nenhum dado encontrado.")
+            st.error("Nenhum dado encontrado ou Cota da API Excedida (Tente amanhã).")
 
     if st.session_state["extracted_data"] is not None:
         df = st.session_state["extracted_data"]
         
         st.success(f"Processamento concluído! {len(df)} registros encontrados.")
-        st.dataframe(df, use_container_width=True)
+        # Correção do Warning: removido use_container_width=True pois será depreciado
+        st.dataframe(df) 
         
         output = io.BytesIO()
         with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
@@ -121,7 +130,7 @@ if uploaded_file:
             type="primary"
         )
 
-# --- RODAPÉ FIXO (CORRIGIDO SEM INDENTAÇÃO) ---
+# --- RODAPÉ ---
 st.markdown("<br><br><br>", unsafe_allow_html=True)
 
 footer_html = """
