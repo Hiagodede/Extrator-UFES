@@ -23,7 +23,7 @@ def extract_page_data(page_bytes, page_number):
         "temperature": 0.0,
     }
     
-    # CORREÇÃO CRÍTICA: O modelo correto é gemini-1.5-flash
+    # Modelo Flash (Rápido e barato para loops)
     model = genai.GenerativeModel("gemini-2.5-flash", generation_config=generation_config)
 
     prompt = f"""
@@ -121,17 +121,73 @@ if uploaded_file:
             type="primary"
         )
 
-# --- RODAPÉ AJUSTADO PARA MODO ESCURO ---
+# --- RODAPÉ ---
 st.markdown("<br><br><br><br>", unsafe_allow_html=True)
 
 footer_html = """
 <style>
-/* Rodapé fixo */
 .fixed-footer {
     position: fixed;
     left: 0;
     bottom: 0;
     width: 100%;
-    background-color: #0E1117; /* Cor EXATA do fundo dark do Streamlit */
-    color: #FAFAFA; /* Texto quase branco */
+    background-color: #0E1117;
+    color: #FAFAFA;
     border-top: 1px solid #262730;
+    padding: 15px 0;
+    z-index: 999;
+}
+
+.footer-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 800px;
+    margin: 0 auto;
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+.profile-img {
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 20px;
+    border: 2px solid #4da6ff;
+}
+
+.text-area {
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+.text-area strong {
+    font-size: 17px;
+    color: #FFFFFF;
+}
+
+.social-links a {
+    text-decoration: none;
+    color: #4da6ff;
+    margin-right: 15px;
+    font-weight: 600;
+}
+</style>
+
+<div class="fixed-footer">
+    <div class="footer-content">
+        <img src="https://media.licdn.com/dms/image/v2/D4D03AQGWQjoEnvH1Hw/profile-displayphoto-scale_200_200/B4DZwkLUOUJIAY-/0/1770133474521?e=1771459200&v=beta&t=GfeIu9hnn4ZlEd3ZevUOVdy0NnHz6lxp09wGbmaI9Vk" class="profile-img" alt="Foto de Perfil">
+        
+        <div class="text-area">
+            <strong>Hiago do Carmo Lopes</strong><br>
+            Diretor de Projetos de TI | Cinética Jr. (UFES)<br>
+            <span class="social-links">
+                <a href="mailto:hiago.lopes@edu.ufes.br" target="_blank">✉️ Email</a>
+                <a href="https://www.linkedin.com/in/hiago-lopes-201294341" target="_blank">🔗 LinkedIn</a>
+            </span>
+        </div>
+    </div>
+</div>
+"""
+
+st.markdown(footer_html, unsafe_allow_html=True)
