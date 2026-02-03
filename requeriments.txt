@@ -1,0 +1,5 @@
+streamlit
+google-generative-ai
+pandas
+xlsxwriter
+openpyxl
