@@ -6,30 +6,8 @@ import io
 import time
 from pypdf import PdfReader, PdfWriter
 
-st.set_page_config(page_title="Extrator UFES", layout="wide")
-
-with st.sidebar:
-    st.header("Sobre o Desenvolvedor")
-    
-    st.markdown("""
-    **Hiago do Carmo Lopes**
-    *Diretor de Projetos de TI | Cinética Jr.*
-    
-    Graduando em Sistemas de Informação pela UFES.
-    
-    Desenvolvo soluções focadas em arquitetura robusta e automação de processos utilizando Inteligência Artificial.
-    
-    ---
-    📧 hiago.lopes@edu.ufes.br
-    🔗 https://www.linkedin.com/in/hiago-lopes-201294341?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app
-    """)
-    
-    st.info("Versão 1.0.0 | Build 2026")
-
-# ... restante do código (verificação da API key, etc) ...
-
 # --- CONFIGURAÇÃO ---
-st.set_page_config(page_title="Extrator UFES (Modo Robusto)", layout="wide")
+st.set_page_config(page_title="Extrator UFES", layout="wide")
 api_key = st.secrets.get("GOOGLE_API_KEY")
 
 if not api_key:
@@ -153,3 +131,79 @@ if uploaded_file:
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
             type="primary"
         )
+
+
+st.markdown("<br><br><br><br>", unsafe_allow_html=True)
+
+# --- RODAPÉ PERSONALIZADO (HTML/CSS) ---
+footer_html = """
+<style>
+/* Estilo do container fixo no rodapé */
+.fixed-footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #f1f3f6; /* Cor de fundo cinza suave */
+    color: #31333F;
+    border-top: 1px solid #d1d5db;
+    padding: 10px 0;
+    z-index: 999;
+}
+
+/* Centraliza o conteúdo dentro do rodapé */
+.footer-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 800px;
+    margin: 0 auto;
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+/* Estilo da Foto Circular */
+.profile-img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%; /* Faz o círculo */
+    object-fit: cover;
+    margin-right: 15px;
+    border: 2px solid #0066cc; /* Borda azul sutil (opcional) */
+}
+
+/* Estilo do Texto */
+.text-area {
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.text-area strong {
+    font-size: 16px;
+    color: #0e1117;
+}
+
+.social-links a {
+    text-decoration: none;
+    color: #0066cc;
+    margin-right: 10px;
+    font-weight: 600;
+}
+</style>
+
+<div class="fixed-footer">
+    <div class="footer-content">
+        <img src="https://avatars.githubusercontent.com/u/SEU_ID_GITHUB?v=4" class="profile-img" alt="Foto de Perfil">
+        
+        <div class="text-area">
+            <strong>Hiago do Carmo Lopes</strong><br>
+            Diretor de Projetos de TI | Cinética Jr. (UFES)<br>
+            <span class="social-links">
+                <a href="mailto:hiago.lopes@edu.ufes.br" target="_blank">📧 Email</a>
+                <a href="https://www.linkedin.com/in/hiago-lopes-201294341" target="_blank">🔗 LinkedIn</a>
+            </span>
+        </div>
+    </div>
+</div>
+"""
+
+st.markdown(footer_html, unsafe_allow_html=True)
